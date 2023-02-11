@@ -1,18 +1,22 @@
 *** Settings ***
 Resource  ../Common.robot
 Resource  ProductsPage.robot
-Resource  LoginPageVariables.resource
-#Resource  ./PO/TopNav.robot
+Resource  LoginPageLocators.resource
+
+*** Variables ***
+${locked_out_user}   locked_out_user
+${standard_user}     standard_user
+${password}          secret_sauce
 
 *** Keywords ***
 Standard user should be able to login from "Login Page" page and land in to the "Products Page"
-    Input Text          ${username_field}     ${standard_user}
-    Input Password      ${password_field}     ${password}
-    Click Button        ${login_button}
+    Input Text          ${USERNAME_FIELD}     ${standard_user}
+    Input Password      ${PASSWORD_FIELD}     ${password}
+    Click Button        ${LOGIN_BUTTON}
     Validate Products Page
 
 Locked out user should not be able to login
-    Input Text          ${username_field}    ${locked_out_user}
-    Input Password      ${password_field}     ${password}
-    Click Button        ${login_button}
-    Page Should Contain Element     ${error_message}
+    Input Text          ${USERNAME_FIELD}     ${locked_out_user}
+    Input Password      ${PASSWORD_FIELD}     ${password}
+    Click Button        ${LOGIN_BUTTON}
+    Page Should Contain Element     ${ERROR_MESSAGE}

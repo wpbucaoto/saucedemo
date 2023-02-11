@@ -1,9 +1,10 @@
 *** Settings ***
 Documentation  SauceDemo Sample Test by Wilson Bucaoto
-Resource  ../Resources/Common.robot
-Resource  ../Resources/PO/LoginPage.robot
-Test Setup  Begin Web Test
-Test Teardown  End Web Test
+#Resource        ../Resources/Common.robot
+#Resource        ../Resources/PO/LoginPage.robot
+Resource        ../Resources/SauceDemoApp.robot
+Test Setup      Common.Begin Web Test
+Test Teardown   Common.End Web Test
 
 *** Variables ***
 ${URL}      https://www.saucedemo.com/
@@ -15,9 +16,13 @@ Test Standard User
     ...             add them to cart and proceed to checkout.
     ...             At the “Checkout overview” page, validate that “item  total” price is equal to
     ...             the price of items added on the “PRODUCTS” page.
+
     Common.Navigate to URL
     LoginPage.Standard user should be able to login from "Login Page" page and land in to the "Products Page"
     ProductsPage.Select Number Of Random Items From Max Items And Checkout   2   6
+    CheckoutPages.Validate Checkout Page
+    CheckoutPages.Input Checkout Details
+    CheckoutPages.Verify Checkout Total
 
 Test Locked Out User
     [Documentation]  Test Case 2: Use locked_out_user to login

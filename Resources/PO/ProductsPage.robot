@@ -1,7 +1,10 @@
 *** Settings ***
 Library   SeleniumLibrary
+Resource  ProductsPageLocators.resource
+Resource  ../Common.robot
 
 *** Variables ***
+${tempcartprice}
 
 *** Keywords ***
 Validate Products Page
@@ -9,32 +12,19 @@ Validate Products Page
 
 Select Number of Random Items From Max Items And Checkout
     [Arguments]     ${items}    ${max_items}
-    ${total}              set variable    ${EMPTY}
+    ${tempcartprice}    set variable    ${EMPTY}
+    Common.Set TotalCartPrice  ${EMPTY}
     FOR    ${index}   IN RANGE   ${items}
        ${random_num}=     Evaluate  random.randint(1, ${max_items})
        ${price}           set variable    ${EMPTY}
-       click element  xpath=(//div[@class='inventory_item_img'])[${random_num}]
-       #click element  xpath=(//div[@class='inventory_item'])[${random_num}]//a[@id='item_1_img_link']
-       #click button  id=add-to-cart-sauce-labs-bolt-t-shirt
-       #${price}=    Get Text    xpath=(//div[@class='inventory_item'])[${random_num}]//div[2]//div[@class='inventory_item_price']
-       ${price}=    Get Text    xpath=//div[@class='inventory_details_price']
-       ${price}=    Evaluate    float(${price[1:]})
-       log       ${price}
-       ${total}=    Evaluate    ${total} + ${price}
-       log       ${total}
-       click button  //button[text()='Add to cart']
-       click button  //button[@id='back-to-products']
+       Click Element      xpath=(//div[@class='inventory_item_img'])[${random_num}]
+       #Now we are in the specific Product Item page
+       ${price}=   Get Text    ${INVENTORY_PRICE}
+       ${price}=   Extract Float From Price String  ${price}    1
+       ${tempCartPrice}=    Evaluate    ${TotalCartPrice} + ${price}
+       Set TotalCartPrice   ${tempCartPrice}
+       click button         ${ADD_TO_CART_BUTTON}
+       click button         ${BACK_TO_PRODUCTS_BUTTON}
     END
-    log       ${total}
-    click element   class=shopping_cart_link
-    click element   //button[@id='checkout']
-    ${checkoutprice}           set variable    ${EMPTY}
-    Wait until element is visible   //span[text()='Checkout: Your Information']
-    Input Text                      //input[@id='first-name']       FirstName
-    Input Text                      //input[@id='last-name']       LasttName
-    Input Text                      //input[@id='postal-code']      60000
-    Click Element                   //input[@id='continue']
-    ${checkoutprice}=    Get Text    xpath=//div[@class='summary_subtotal_label']
-    ${checkoutprice}=    Evaluate    float(${checkoutprice[13:]})
-    log  ${checkoutprice}
-    should be equal  ${checkoutprice}   ${total}
+    Click Element       ${SHOPPING_CART_LINK}
+    Click Element       ${CHECKOUT_BUTTON}
