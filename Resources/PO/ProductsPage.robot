@@ -1,16 +1,17 @@
 *** Settings ***
 Library   SeleniumLibrary
 Resource  ProductsPageLocators.resource
+Resource  CheckoutPages.robot
 Resource  ../Common.robot
 
 *** Variables ***
 ${tempcartprice}
 
 *** Keywords ***
-Validate Products Page
+Validate "Products Page"
     Wait until element is visible   //span[text()='Products']
 
-Select Number of Random Items From Max Items And Checkout
+Select Number Of random items from Max items
     [Arguments]     ${items}    ${max_items}
     ${tempcartprice}    set variable    ${EMPTY}
     Common.Set TotalCartPrice  ${EMPTY}
@@ -27,4 +28,7 @@ Select Number of Random Items From Max Items And Checkout
        click button         ${BACK_TO_PRODUCTS_BUTTON}
     END
     Click Element       ${SHOPPING_CART_LINK}
+
+Go to "Cart Page" and Proceed to Checkout
     Click Element       ${CHECKOUT_BUTTON}
+    CheckoutPages.Validate "Checkout Page"

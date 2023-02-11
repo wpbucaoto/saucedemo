@@ -10,7 +10,7 @@ ${postalCode}   60000
 
 
 *** Keywords ***
-Validate Checkout Page
+Validate "Checkout Page"
     Wait until element is visible   ${CHECKOUT_LABEL}
 
 Input Checkout Details
