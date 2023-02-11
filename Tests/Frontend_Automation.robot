@@ -11,7 +11,7 @@ ${URL}      https://www.saucedemo.com/
 ${BROWSER}  chrome
 
 *** Test Cases ***
-Test Standard User
+Standard User Adds Items to Cart and Checkouts
     [Documentation]  Test Case 1: Using standard_user, select two random items from “PRODUCTS” page,
     ...             add them to cart and proceed to checkout.
     ...             At the “Checkout overview” page, validate that “item  total” price is equal to
@@ -24,7 +24,7 @@ Test Standard User
     CheckoutPages.Input Checkout Details
     CheckoutPages.Verify Checkout Total
 
-Test Locked Out User
+Locked Out User Logs in
     [Documentation]  Test Case 2: Use locked_out_user to login
     Common.Navigate to URL
     LoginPage.Locked out user should not be able to login
